@@ -5,13 +5,14 @@ import 'components/Application.scss';
 
 import DayList from 'components/DayList';
 import Appointment from 'components/Appointment';
-import { getAppointmentsForDay } from 'helpers/selectors.js';
+import { getAppointmentsForDay, getInterview } from 'helpers/selectors.js';
 
 export default function Application(props) {
   const [state, setState] = useState({
     day: 'Monday',
     days: [],
-    appointments: []
+    appointments: {},
+    interviewers: {}
   });
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -23,20 +24,28 @@ export default function Application(props) {
   useEffect(() => {
     const daysURL = '/api/days';
     const apptURL = '/api/appointments'
+    const interviewersURL = 'api/interviewers'
     Promise.all([
       axios.get(daysURL),
-      axios.get(apptURL)
+      axios.get(apptURL),
+      axios.get(interviewersURL)
     ])
     .then(all => {
-      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data}))
+      setState(prev => ({...prev, days: all[0].data, appointments: all[1].data, interviewers: all[2].data}))
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
   
   let list = dailyAppointments.map(appointment => {
+    const interview = getInterview(state, appointment.interview);
+
     return (
-      <Appointment key={appointment.id} {...appointment} />
-    )
+      <Appointment 
+        key={appointment.id} 
+        {...appointment}
+        interview={interview} 
+      />
+    );
   });
 
   return (
