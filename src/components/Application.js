@@ -36,16 +36,30 @@ export default function Application(props) {
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
+
+  const bookInterview = (id, interview) => {
+    const appointment ={
+      ...state.appointments[id],
+      interview: { ...interview }
+    }
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    }
+    setState({...state, appointments})
+    return axios.put(`api/appointments/${id}`,{ interview })
+  }
   
   let list = dailyAppointments.map(appointment => {
     const interview = getInterview(state, appointment.interview);
 
     return (
       <Appointment 
-        key={appointment.id} 
         {...appointment}
+        key={appointment.id} 
         interview={interview} 
         interviewers={interviewers}
+        bookInterview={bookInterview}
       />
     );
   });
@@ -73,7 +87,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
       {list}
-      <Appointment id="last" time="5pm" />
+      <Appointment key="last" time="5pm" />
       </section>
     </main>
   );
