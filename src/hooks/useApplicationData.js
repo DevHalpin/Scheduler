@@ -1,10 +1,29 @@
 import { useReducer, useEffect} from 'react';
 import axios from 'axios';
 
+const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
+
 export default function useApplicationData() {
   const SET_DAY = 'SET_DAY';
   const SET_APPLICATION_DATA = 'SET_APPLICATION_DATA';
   const SET_INTERVIEW = 'SET_INTERVIEW';
+
+  const remainingSpotsForDay = (day, appointments) =>{
+    let spots = 0;
+    for (const apptID of day.appointments) {
+      if (appointments[apptID].interview === null) {
+        spots ++;
+      }
+    };
+    return spots;
+  };
+
+  const updateSpots = (days, appointments) => {
+    const daysWithSpots = days.map(day => {
+      return { ...day, spots: remainingSpotsForDay(day, appointments) };
+    });
+    return daysWithSpots;
+  };
 
   const reducer = (state, action) => {
     switch (action.type) {
@@ -18,42 +37,15 @@ export default function useApplicationData() {
           interviewers: action.value.interviewers
         };
       case SET_INTERVIEW:
-        const appointment ={
-          ...state.appointments[action.id],
-          interview: action.interview && { ...action.interview }
-        }
         const appointments = {
           ...state.appointments,
-          [action.id]: appointment
+          [action.id]: {
+            ...state.appointments[action.id],
+            interview: action.interview && { ...action.interview }
+          }
         }
 
-        const findDay = (days, id) => {
-          for (let day of days) {
-            for (let value of day.appointments) {
-              if (value === id) {
-                return day;
-              }
-            }
-          }
-          return null;
-        };
-
-        const foundDay = findDay(state.days, action.id);
-
-        let spots = 0;
-        for (let apptID of foundDay.appointments) {
-          if (appointments[apptID].interview === null) {
-            spots ++;
-          }
-        };
-
-        const days = state.days.map(day => {
-          if (day.name === foundDay.name) {
-            return { ...day, spots };
-          } else {
-            return day;
-          }
-        });
+        const days = updateSpots(state.days, appointments)
 
         return { ...state, appointments, days };
       default:
@@ -76,6 +68,10 @@ export default function useApplicationData() {
     const daysURL = '/api/days';
     const apptURL = '/api/appointments'
     const interviewersURL = 'api/interviewers'
+    webSocket.onmessage = function (event) {
+      const { id, interview } = JSON.parse(event.data)
+      dispatch({ type: SET_INTERVIEW, id, interview})
+    }
     Promise.all([
       axios.get(daysURL),
       axios.get(apptURL),
@@ -92,8 +88,9 @@ export default function useApplicationData() {
         }
       })
     })
+    return () => webSocket.close();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  } );
 
   const bookInterview = (id, interview) => {
     return axios.put(`api/appointments/${id}`,{ interview })

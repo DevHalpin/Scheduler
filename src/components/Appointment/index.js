@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect } from 'react';
 
 import 'components/Appointment/styles.scss';
 import Header from './Header';
@@ -32,11 +32,21 @@ export default function Appointment (props) {
       interviewer
     };
 
+    
     transition(SAVE);
     props.bookInterview(props.id,interview)
     .then(res => transition(SHOW))
     .catch(error => transition(ERROR_SAVE, true))
   };
+  
+  useEffect(() => {
+    if (props.interview && mode === EMPTY) {
+      transition(SHOW);
+    }
+    if (!props.interview && mode === SHOW) {
+      transition(EMPTY);
+    }
+  }, [props.interview, transition, mode]);
 
   const deleting = () => {
     transition(DELETE, true);
@@ -50,12 +60,13 @@ export default function Appointment (props) {
   const confirming = () => transition(CONFIRM);
 
   const editing = () => transition(EDIT);
+  
 
   return (
     <article className="appointment">
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === SHOW && (<Show
+      {mode === SHOW && props.interview && (<Show
           interviewer={props.interview.interviewer}
           student={props.interview.student}
           onEdit={() => editing()}
