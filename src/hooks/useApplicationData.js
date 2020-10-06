@@ -1,59 +1,15 @@
 import { useReducer, useEffect} from 'react';
 import axios from 'axios';
 
+import reducer, {
+  SET_DAY,
+  SET_APPLICATION_DATA,
+  SET_INTERVIEW
+} from "reducers/application";
+
 const webSocket = new WebSocket(process.env.REACT_APP_WEBSOCKET_URL);
 
 export default function useApplicationData() {
-  const SET_DAY = 'SET_DAY';
-  const SET_APPLICATION_DATA = 'SET_APPLICATION_DATA';
-  const SET_INTERVIEW = 'SET_INTERVIEW';
-
-  const remainingSpotsForDay = (day, appointments) =>{
-    let spots = 0;
-    for (const apptID of day.appointments) {
-      if (appointments[apptID].interview === null) {
-        spots ++;
-      }
-    };
-    return spots;
-  };
-
-  const updateSpots = (days, appointments) => {
-    const daysWithSpots = days.map(day => {
-      return { ...day, spots: remainingSpotsForDay(day, appointments) };
-    });
-    return daysWithSpots;
-  };
-
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case SET_DAY:
-        return {...state,day: action.value};
-      case SET_APPLICATION_DATA:
-        return {
-          ...state,
-          days: action.value.days,
-          appointments: action.value.appointments,
-          interviewers: action.value.interviewers
-        };
-      case SET_INTERVIEW:
-        const appointments = {
-          ...state.appointments,
-          [action.id]: {
-            ...state.appointments[action.id],
-            interview: action.interview && { ...action.interview }
-          }
-        }
-
-        const days = updateSpots(state.days, appointments)
-
-        return { ...state, appointments, days };
-      default:
-        throw new Error(
-          `Tried to reduce with unsupported action type: ${action.type}`
-        );
-    }
-  }
 
   const [state, dispatch] = useReducer(reducer, {
     day: 'Monday',
