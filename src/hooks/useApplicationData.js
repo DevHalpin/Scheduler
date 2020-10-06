@@ -67,7 +67,7 @@ export default function useApplicationData() {
   useEffect(() => {
     const daysURL = '/api/days';
     const apptURL = '/api/appointments'
-    const interviewersURL = 'api/interviewers'
+    const interviewersURL = '/api/interviewers'
     webSocket.onmessage = function (event) {
       const { id, interview } = JSON.parse(event.data)
       dispatch({ type: SET_INTERVIEW, id, interview})
@@ -90,7 +90,7 @@ export default function useApplicationData() {
     })
     return () => webSocket.close();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  } );
+  }, []);
 
   const bookInterview = (id, interview) => {
     return axios.put(`api/appointments/${id}`,{ interview })
