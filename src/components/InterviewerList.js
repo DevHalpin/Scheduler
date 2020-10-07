@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 InterviewerList.propTypes = {
     interviewer: PropTypes.number,
-    setInterviewer: PropTypes.func.isRequired
+    setInterviewer: PropTypes.func
 };
 
 export default function InterviewerList (props) {
