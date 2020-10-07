@@ -3,20 +3,20 @@ export const SET_APPLICATION_DATA = 'SET_APPLICATION_DATA';
 export const SET_INTERVIEW = 'SET_INTERVIEW';
 
 const remainingSpotsForDay = (day, appointments) =>{
-    let spots = 0;
-    for (const apptID of day.appointments) {
+  let spots = 0;
+  for (const apptID of day.appointments) {
     if (appointments[apptID].interview === null) {
-        spots ++;
+      spots ++;
     }
-    };
-    return spots;
+  };
+  return spots;
 };
 
 const updateSpots = (days, appointments) => {
-    const daysWithSpots = days.map(day => {
+  const daysWithSpots = days.map(day => {
     return { ...day, spots: remainingSpotsForDay(day, appointments) };
-    });
-    return daysWithSpots;
+  });
+  return daysWithSpots;
 };
 
 export default function reducer (state, action) {

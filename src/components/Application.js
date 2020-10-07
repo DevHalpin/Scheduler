@@ -4,7 +4,9 @@ import 'components/Application.scss';
 
 import DayList from 'components/DayList';
 import Appointment from 'components/Appointment';
+
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from 'helpers/selectors.js';
+
 import useApplicationData from 'hooks/useApplicationData';
 
 export default function Application(props) {
@@ -42,7 +44,8 @@ export default function Application(props) {
           alt="Interview Scheduler"
         />
         <hr className="sidebar__separator sidebar--centered" />
-        <nav className="sidebar__menu"><DayList
+        <nav className="sidebar__menu">
+        <DayList
           days={state.days}
           day={state.day}
           setDay={setDay}

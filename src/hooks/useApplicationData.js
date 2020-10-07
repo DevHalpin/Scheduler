@@ -45,7 +45,6 @@ export default function useApplicationData() {
       })
     })
     return () => webSocket.close();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const bookInterview = (id, interview) => {

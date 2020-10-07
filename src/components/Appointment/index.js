@@ -25,18 +25,16 @@ export default function Appointment (props) {
 		props.interview ? SHOW : EMPTY
   );
 
-
   const save =(name, interviewer) => {
     const interview = {
       student: name,
       interviewer
     };
-
     
     transition(SAVE);
     props.bookInterview(props.id,interview)
-    .then(res => transition(SHOW))
-    .catch(error => transition(ERROR_SAVE, true))
+    .then(() => transition(SHOW))
+    .catch(() => transition(ERROR_SAVE, true))
   };
   
   useEffect(() => {
@@ -51,10 +49,10 @@ export default function Appointment (props) {
   const deleting = () => {
     transition(DELETE, true);
     props.cancelInterview(props.id)
-    .then(res => {
+    .then(() => {
       transition(EMPTY);
     })
-    .catch(error => transition(ERROR_DELETE, true))
+    .catch(() => transition(ERROR_DELETE, true))
   }
 
   const confirming = () => transition(CONFIRM);
