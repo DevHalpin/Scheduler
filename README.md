@@ -4,11 +4,21 @@
 
 App is running live at https://silly-spence-9af50e.netlify.app/ using Heroku and Netlify services.
 
+## Screenshots
+
+### App
+
 !["Form and schedule app screenshot"](https://github.com/devhalpin/scheduler/blob/master/docs/Screenshot.png)
+
+### Confirming
 
 !["confirming screenshot"](https://github.com/devhalpin/scheduler/blob/master/docs/Scheduler_confirming.png)
 
+### Saving
+
 !["Saving screenshot"](https://github.com/devhalpin/scheduler/blob/master/docs/Scheduler_saving.png)
+
+### Deleting
 
 !["Deleting screenshot"](https://github.com/devhalpin/scheduler/blob/master/docs/Scheduler_deleting.png)
 
