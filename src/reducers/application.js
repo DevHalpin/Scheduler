@@ -19,32 +19,45 @@ const updateSpots = (days, appointments) => {
   return daysWithSpots;
 };
 
-export default function reducer (state, action) {
-  switch (action.type) {
-    case SET_DAY:
-      return {...state,day: action.value};
-    case SET_APPLICATION_DATA:
-      return {
-        ...state,
-        days: action.value.days,
-        appointments: action.value.appointments,
-        interviewers: action.value.interviewers
-      };
-    case SET_INTERVIEW:
-      const appointments = {
-        ...state.appointments,
-        [action.id]: {
-          ...state.appointments[action.id],
-          interview: action.interview && { ...action.interview }
-        }
-      }
+const setDay = (state, action) => {
+  return {...state,day: action.value};
+}
 
-      const days = updateSpots(state.days, appointments)
+const setAppData = (state, action) => {
+  return {
+    ...state,
+    days: action.value.days,
+    appointments: action.value.appointments,
+    interviewers: action.value.interviewers
+  };
+}
 
-      return { ...state, appointments, days };
-    default:
-      throw new Error(
-        `Tried to reduce with unsupported action type: ${action.type}`
-      );
+const setInterview = (state, action) => {
+  const appointments = {
+    ...state.appointments,
+    [action.id]: {
+      ...state.appointments[action.id],
+      interview: action.interview && { ...action.interview }
+    }
   }
+
+  const days = updateSpots(state.days, appointments)
+
+  return { ...state, appointments, days };
+}
+
+const reducers = {
+  [SET_DAY] : setDay,
+  [SET_APPLICATION_DATA] : setAppData,
+  [SET_INTERVIEW] : setInterview
+}
+
+export default function useReducer (state, action) {
+  if(reducers[action.type])
+  {
+    return reducers[action.type](state, action)
+  }    
+  throw new Error(
+    `Tried to reduce with unsupported action type: ${action.type}`
+  );
 }
