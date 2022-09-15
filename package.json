@@ -10,8 +10,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-hooks-testing-library": "^0.6.0",
-    "react-scripts": "3.0.0",
-    "react-test-render": "^1.1.2",
+    "react-scripts": "^5.0.0",
     "react-test-renderer": "^16.13.1"
   },
   "scripts": {
@@ -19,7 +18,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "storybook": "start-storybook -p 9009 -s public --ci",
+    "storybook": "start-storybook -p 9009 -s public",
     "build-storybook": "build-storybook -s public",
     "cypress": "cypress open -P ."
   },
@@ -37,16 +36,26 @@
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
-    "@storybook/addon-actions": "^5.0.10",
+    "@babel/eslint-parser": "7.19.1",
+    "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-backgrounds": "^5.0.10",
-    "@storybook/addon-links": "^5.0.10",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
     "@storybook/addons": "^5.0.10",
-    "@storybook/react": "^5.0.10",
+    "@storybook/builder-webpack5": "^6.5.12",
+    "@storybook/manager-webpack5": "^6.5.12",
+    "@storybook/node-logger": "^6.5.12",
+    "@storybook/preset-create-react-app": "^4.1.2",
+    "@storybook/react": "^6.5.12",
+    "@storybook/testing-library": "^0.0.13",
     "@testing-library/jest-dom": "^4.0.0",
     "@testing-library/react": "^8.0.7",
     "babel-loader": "^8.0.5",
-    "node-sass": "npm:sass@^1.49.7",
-    "prop-types": "^15.7.2"
+    "babel-plugin-named-exports-order": "^0.0.2",
+    "prop-types": "^15.8.1",
+    "sass": "^1.49.7",
+    "webpack": "^5.74.0"
   },
   "jest": {
     "watchPathIgnorePatterns": [
@@ -56,6 +65,26 @@
     "collectCoverageFrom": [
       "src/**/*.js",
       "!src/index.js"
+    ]
+  },
+  "eslintConfig": {
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      },
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
     ]
   }
 }
