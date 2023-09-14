@@ -55,7 +55,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "prop-types": "^15.8.1",
     "sass": "^1.49.7",
-    "webpack": "^5.74.0"
+    "webpack": "^5.76.0"
   },
   "jest": {
     "watchPathIgnorePatterns": [
